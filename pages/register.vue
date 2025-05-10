@@ -21,8 +21,8 @@
             ></v-text-field>
           </v-card-text>
           <v-card-actions class="d-flex flex-column justify-center">
-            <v-btn block variant="outlined" @click="login">Login</v-btn>
-            <div>Don't have an account? <a href="/register">Sign up</a></div>
+            <v-btn block variant="outlined" @click="login">Sign Up</v-btn>
+            <div>Already have an account? <a href="/register">Log In</a></div>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -40,7 +40,6 @@ const password = ref("")
 const usernameError = ref("")
 const passwordError = ref("")
 const token = useStorage("token")
-const userdata = useStorage("userInfo")
 
 const validateInputs = () => {
   usernameError.value = username.value ? "" : "Username is required"
@@ -52,7 +51,7 @@ const login = async () => {
   if (!validateInputs()) return
 
   try {
-    const response = await fetch("/api/auth/login", {
+    const response = await fetch("/api/auth/register", {
       method: "POST",
 
       headers: {
@@ -68,13 +67,11 @@ const login = async () => {
 
     if (response.ok) {
       // Redirect to dashboard or home page
-      console.log(data.user, "data")
-      token.value = data.token
-      userdata.value = data.user.email
+      console.log(data, "data")
+      navigateTo("/login")
     } else {
       passwordError.value = data.message || "Invalid username or password"
     }
-    window.location.reload()
   } catch (error) {
     console.error("Login error:", error)
     passwordError.value = "Server error. Please try again later."

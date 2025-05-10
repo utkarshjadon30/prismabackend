@@ -1,7 +1,8 @@
 <template>
   <div>
     <h2>Users</h2>
-    <div v-for="user in users.data" :key="user.id">
+    {{ userInfo }}
+    <!-- <div v-for="user in users.data" :key="user.id">
       {{ user.username }} (ID: {{ user.id }})
       <v-btn @click="updateUser(user.id)">✏️ Update</v-btn>
       <button @click="deleteUser(user.id)">🗑️ Delete</button>
@@ -10,49 +11,51 @@
     <h2>Add User</h2>
     <input v-model="newUser.name" placeholder="Name" />
 
-    <button @click="addUser">➕ Add</button>
+    <button @click="addUser">➕ Add</button> -->
   </div>
 </template>
 
 <script setup>
-const { data: users, error, refresh } = await useFetch("/api/user") // NOTE: route is /api/users not /api/user
+import { useStorage } from "@vueuse/core"
+const userInfo = useStorage("userInfo")
+// const { data: users, error, refresh } = await useFetch("/api/user") // NOTE: route is /api/users not /api/user
 
-if (error.value) {
-  console.error("Error fetching users:", error.value)
-}
+// if (error.value) {
+//   console.error("Error fetching users:", error.value)
+// }
 
-const newUser = ref({
-  name: "",
-})
+// const newUser = ref({
+//   name: "",
+// })
 
-const addUser = async () => {
-  await useFetch("/api/user", {
-    method: "POST",
-    body: newUser.value,
-  })
-  refresh() // Re-fetch updated list
-}
+// const addUser = async () => {
+//   await useFetch("/api/user", {
+//     method: "POST",
+//     body: newUser.value,
+//   })
+//   refresh() // Re-fetch updated list
+// }
 
-const updateUser = async (id) => {
-  const updatedData = {
-    id,
-    name: prompt("Enter new name"),
-  }
+// const updateUser = async (id) => {
+//   const updatedData = {
+//     id,
+//     name: prompt("Enter new name"),
+//   }
 
-  await useFetch("/api/user", {
-    method: "PUT",
-    body: updatedData,
-  })
-  refresh()
-}
+//   await useFetch("/api/user", {
+//     method: "PUT",
+//     body: updatedData,
+//   })
+//   refresh()
+// }
 
-const deleteUser = async (id) => {
-  await useFetch("/api/user", {
-    method: "DELETE",
-    body: { id },
-  })
-  refresh()
-}
+// const deleteUser = async (id) => {
+//   await useFetch("/api/user", {
+//     method: "DELETE",
+//     body: { id },
+//   })
+//   refresh()
+// }
 </script>
 
 <style lang="scss" scoped></style>
